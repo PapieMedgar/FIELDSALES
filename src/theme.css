@@ -1,0 +1,116 @@
+/* Modernized theme for the entire web app */
+:root {
+  --primary: #4f8cff;
+  --primary-dark: #2a5dab;
+  --secondary: #f5f6fa;
+  --accent: #ffb347;
+  --danger: #ff4d4f;
+  --success: #52c41a;
+  --text: #222;
+  --text-light: #fff;
+  --border-radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+body {
+  background: var(--secondary);
+  color: var(--text);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 2.5rem;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+nav {
+  background: var(--primary);
+  color: var(--text-light);
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+nav a:hover {
+  color: var(--accent);
+}
+nav button {
+  background: var(--danger);
+  color: var(--text-light);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  margin-left: auto;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+nav button:hover {
+  background: #d9363e;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  padding: 0.7em 1em;
+  margin-bottom: 1rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus, select:focus {
+  border: 1.5px solid var(--primary);
+  box-shadow: 0 0 0 2px #e6f0ff;
+}
+button[type="submit"], button[type="button"] {
+  background: var(--primary);
+  color: var(--text-light);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover, button[type="button"]:hover {
+  background: var(--primary-dark);
+}
+
+h1, h2, h3 {
+  color: var(--primary-dark);
+  margin-top: 0;
+}
+
+ul {
+  padding-left: 1.2em;
+}
+
+p, label {
+  margin-bottom: 0.5em;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container {
+    padding: 1rem 0.5rem;
+    max-width: 98vw;
+  }
+  nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem;
+  }
+}
