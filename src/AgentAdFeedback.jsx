@@ -1,8 +1,12 @@
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AgentAdFeedback = () => {
   const [feedback, setFeedback] = useState('');
   const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +24,7 @@ const AgentAdFeedback = () => {
       if (!res.ok) throw new Error(data.message);
       setMessage('Feedback submitted!');
       setFeedback('');
+      setSubmitted(true);
     } catch (err) {
       setMessage(err.message);
     }
@@ -33,6 +38,9 @@ const AgentAdFeedback = () => {
         <button type="submit">Submit</button>
       </form>
       {message && <p>{message}</p>}
+      {submitted && (
+        <button style={{marginTop:12}} onClick={() => navigate('/agent-dashboard')}>Back to Dashboard</button>
+      )}
     </div>
   );
 };

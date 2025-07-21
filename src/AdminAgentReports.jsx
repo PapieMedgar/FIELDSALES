@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminAgentReports = () => {
   const [agents, setAgents] = useState([]);
@@ -6,6 +7,7 @@ const AdminAgentReports = () => {
   const [visits, setVisits] = useState([]);
   const [checks, setChecks] = useState([]);
   const [adBoards, setAdBoards] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch all agents
@@ -14,6 +16,7 @@ const AdminAgentReports = () => {
       .then(data => setAgents(data.agents || []));
   }, []);
 
+  const [adFeedback, setAdFeedback] = useState([]);
   const fetchReports = async (email) => {
     setSelected(email);
     // Fetch store visits
@@ -25,6 +28,9 @@ const AdminAgentReports = () => {
     // Fetch ad boards
     const a = await fetch(`http://localhost:4000/api/admin/agent-adboards?email=${email}`).then(r => r.json());
     setAdBoards(a.adBoards || []);
+    // Fetch ad feedback
+    const f = await fetch(`http://localhost:4000/api/admin/agent-ad-feedback?email=${email}`).then(r => r.json());
+    setAdFeedback(f.feedbacks || []);
   };
 
   return (
@@ -85,8 +91,24 @@ const AdminAgentReports = () => {
               <li key={i}>Radius: {a.radius}, Boards: {a.numBoards}, Position: {a.position}, {new Date(a.timestamp).toLocaleString()}</li>
             ))}
           </ul>
+          <h3>Ad Feedback ({adFeedback.length})
+            <a
+              href={`http://localhost:4000/api/admin/agent-ad-feedback-csv?email=${selected}`}
+              style={{ marginLeft: 16, fontSize: '0.9em' }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download CSV
+            </a>
+          </h3>
+          <ul>
+            {adFeedback.map((f, i) => (
+              <li key={i}>{f.feedback} ({new Date(f.timestamp).toLocaleString()})</li>
+            ))}
+          </ul>
         </>
       )}
+      <button style={{marginTop:24}} onClick={() => navigate('/admin-dashboard')}>Back to Dashboard</button>
     </div>
   );
 };

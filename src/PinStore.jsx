@@ -16,7 +16,7 @@ const PinStore = () => {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         });
-        setMessage('Location pinned!');
+      setMessage('Location pinned!');
       },
       () => setMessage('Unable to retrieve your location')
     );
@@ -37,7 +37,7 @@ const PinStore = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-      setMessage('Store visit recorded!');
+      setMessage('Submission complete! Proceed to dashboard or next step.');
       setStoreName('');
       setLocation(null);
     } catch (err) {

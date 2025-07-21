@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminStoreVisits = () => {
   const [visits, setVisits] = useState([]);
   const [date, setDate] = useState('');
+  const navigate = useNavigate();
 
   const fetchVisits = async () => {
     let url = 'http://localhost:4000/api/admin/store-visits';
@@ -32,6 +34,7 @@ const AdminStoreVisits = () => {
           </li>
         ))}
       </ul>
+      <button style={{marginTop:24}} onClick={() => navigate('/admin-dashboard')}>Back to Dashboard</button>
     </div>
   );
 };

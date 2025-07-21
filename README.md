@@ -35,12 +35,14 @@ npm start
 The backend will run on http://localhost:4000.
 
 
+
 ### 3. Usage
 - Register a new user or use default credentials (see below).
 - After login, you will be redirected to your dashboard based on your role:
   - **Admin:** `/admin-dashboard` (manage agents, view all visits, reports, etc.)
   - **Agent:** `/agent-dashboard` (store visits, check in/out, ad boards, feedback)
   - **Client:** `/client-dashboard` (submit FICA, feedback, SIM card feedback)
+- After submitting feedback or forms, you will see a "Back to Dashboard" button to quickly return to your dashboard (for all roles).
 
 #### Default Users (if not registered):
 - **Agent:** agent@example.com / agent123

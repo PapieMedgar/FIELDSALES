@@ -1,3 +1,118 @@
+import nodemailer from 'nodemailer';
+// Setup Nodemailer transporter (Ethereal test account)
+let transporter;
+nodemailer.createTestAccount().then(testAccount => {
+  transporter = nodemailer.createTransport({
+    host: testAccount.smtp.host,
+    port: testAccount.smtp.port,
+    secure: testAccount.smtp.secure,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass
+    }
+  });
+});
+// Admin: Register new agent (with password validation and email verification)
+app.post('/api/admin/add-agent', async (req, res) => {
+  const { name, surname, id, email, password, confirmPassword } = req.body;
+  if (!name || !surname || !id || !email || !password || !confirmPassword) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+  if (password.length < 8) {
+    return res.status(400).json({ message: 'Password must be at least 8 characters' });
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
+  }
+  if (users.find(u => u.email === email)) {
+    return res.status(400).json({ message: 'User already exists' });
+  }
+  users.push({ name, surname, id, email, password, role: 'agent', verified: false });
+  // Send verification email
+  if (transporter) {
+    const verifyLink = `http://localhost:4000/api/verify-agent?email=${encodeURIComponent(email)}`;
+    const info = await transporter.sendMail({
+      from: 'noreply@fieldsales.com',
+      to: email,
+      subject: 'Verify your Agent Account',
+      html: `<h3>Welcome, ${name}!</h3><p>Please verify your agent account by clicking the link below:</p><a href="${verifyLink}">${verifyLink}</a>`
+    });
+    // For demo: log the preview URL
+    console.log('Verification email sent:', nodemailer.getTestMessageUrl(info));
+  }
+  res.json({ message: 'Agent registered. Verification email sent.' });
+});
+
+// Agent email verification endpoint
+app.get('/api/verify-agent', (req, res) => {
+  const { email } = req.query;
+  const user = users.find(u => u.email === email && u.role === 'agent');
+  if (!user) return res.status(400).send('Invalid verification link.');
+  user.verified = true;
+  res.send('Agent account verified! You may now log in.');
+});
+
+// ...existing code...
+
+// Admin: Get all agents
+app.get('/api/admin/agents', (req, res) => {
+  const agents = users.filter(u => u.role === 'agent');
+  res.json({ agents });
+});
+
+// Admin: Download agent's store visits as CSV
+app.get('/api/admin/agent-store-visits-csv', (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Agent email required' });
+  const visits = storeVisits.filter(v => v.username === email);
+  const parser = new Json2csvParser({ fields: ['username', 'storeName', 'location', 'timestamp'] });
+  const csv = parser.parse(visits.map(v => ({
+    ...v,
+    location: v.location ? `${v.location.lat},${v.location.lng}` : ''
+  })));
+  res.header('Content-Type', 'text/csv');
+  res.attachment('store_visits.csv');
+  res.send(csv);
+});
+
+// Admin: Download agent's check events as CSV
+app.get('/api/admin/agent-check-events-csv', (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Agent email required' });
+  const checks = checkEvents.filter(e => e.username === email);
+  const parser = new Json2csvParser({ fields: ['username', 'action', 'location', 'timestamp'] });
+  const csv = parser.parse(checks.map(e => ({
+    ...e,
+    location: e.location ? `${e.location.lat},${e.location.lng}` : ''
+  })));
+  res.header('Content-Type', 'text/csv');
+  res.attachment('check_events.csv');
+  res.send(csv);
+});
+
+// Admin: Download agent's ad board submissions as CSV
+app.get('/api/admin/agent-adboards-csv', (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Agent email required' });
+  const boards = adBoards.filter(a => a.username === email);
+  const parser = new Json2csvParser({ fields: ['username', 'numBoards', 'radius', 'position', 'timestamp'] });
+  const csv = parser.parse(boards);
+  res.header('Content-Type', 'text/csv');
+  res.attachment('adboards.csv');
+  res.send(csv);
+});
+
+// Admin: Download agent's ad feedback as CSV
+app.get('/api/admin/agent-ad-feedback-csv', (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Agent email required' });
+  const feedbacks = agentAdFeedbacks.filter(f => f.username === email);
+  const parser = new Json2csvParser({ fields: ['username', 'feedback', 'timestamp'] });
+  const csv = parser.parse(feedbacks);
+  res.header('Content-Type', 'text/csv');
+  res.attachment('ad_feedback.csv');
+  res.send(csv);
+});
 
 import express from 'express';
 import cors from 'cors';
@@ -189,16 +304,43 @@ app.post('/api/check', (req, res) => {
 
 // Sign up endpoint
 // Only allow clients to sign up
-app.post('/api/signup', (req, res) => {
-  const { name, surname, id, email, password } = req.body;
-  if (!name || !surname || !id || !email || !password) {
+app.post('/api/signup', async (req, res) => {
+  const { name, surname, id, email, password, confirmPassword } = req.body;
+  if (!name || !surname || !id || !email || !password || !confirmPassword) {
     return res.status(400).json({ message: 'All fields are required' });
+  }
+  if (password.length < 8) {
+    return res.status(400).json({ message: 'Password must be at least 8 characters' });
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
   }
   if (users.find(u => u.email === email)) {
     return res.status(400).json({ message: 'User already exists' });
   }
-  users.push({ name, surname, id, email, password, role: 'client' });
-  res.json({ message: 'Signup successful' });
+  users.push({ name, surname, id, email, password, role: 'client', verified: false });
+  // Send verification email
+  if (transporter) {
+    const verifyLink = `http://localhost:4000/api/verify-client?email=${encodeURIComponent(email)}`;
+    const info = await transporter.sendMail({
+      from: 'noreply@fieldsales.com',
+      to: email,
+      subject: 'Verify your Client Account',
+      html: `<h3>Welcome, ${name}!</h3><p>Please verify your client account by clicking the link below:</p><a href="${verifyLink}">${verifyLink}</a>`
+    });
+    // For demo: log the preview URL
+    console.log('Verification email sent:', nodemailer.getTestMessageUrl(info));
+  }
+  res.json({ message: 'Signup successful. Verification email sent.' });
+});
+
+// Client email verification endpoint
+app.get('/api/verify-client', (req, res) => {
+  const { email } = req.query;
+  const user = users.find(u => u.email === email && u.role === 'client');
+  if (!user) return res.status(400).send('Invalid verification link.');
+  user.verified = true;
+  res.send('Client account verified! You may now log in.');
 });
 
 

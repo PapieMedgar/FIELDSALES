@@ -1,9 +1,13 @@
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ClientFeedback = () => {
   const [feedback, setFeedback] = useState('');
   const [fica, setFica] = useState(null);
   const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleFicaChange = (e) => {
     setFica(e.target.files[0]);
@@ -29,6 +33,7 @@ const ClientFeedback = () => {
       setMessage('Feedback and FICA uploaded!');
       setFeedback('');
       setFica(null);
+      setSubmitted(true);
     } catch (err) {
       setMessage(err.message);
     }
@@ -43,6 +48,9 @@ const ClientFeedback = () => {
         <button type="submit">Submit</button>
       </form>
       {message && <p>{message}</p>}
+      {submitted && (
+        <button style={{marginTop:12}} onClick={() => navigate('/client-dashboard')}>Back to Dashboard</button>
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SimCardFeedback = () => {
   const [agents, setAgents] = useState([]);
@@ -8,6 +9,8 @@ const SimCardFeedback = () => {
   const [simCardDetails, setSimCardDetails] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/api/admin/agents')
@@ -37,6 +40,7 @@ const SimCardFeedback = () => {
         setFeedback('');
         setSimCardDetails('');
         setAgentEmail('');
+        setSubmitted(true);
       }
     } catch (err) {
       setMessage('An error occurred. Please try again.');
@@ -71,6 +75,17 @@ const SimCardFeedback = () => {
         </button>
       </form>
       {message && <div style={{ marginTop: 18, textAlign: 'center', color: message.includes('success') ? 'green' : '#b91c1c', fontWeight: 500 }}>{message}</div>}
+      {submitted && (
+        <button style={{marginTop:12}} onClick={() => {
+          const role = localStorage.getItem('role');
+          if (role === 'client') navigate('/client-dashboard');
+          else if (role === 'agent') navigate('/agent-dashboard');
+          else if (role === 'admin') navigate('/admin-dashboard');
+          else navigate('/');
+        }}>
+          Back to Dashboard
+        </button>
+      )}
     </div>
   );
 };
