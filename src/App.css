@@ -1,23 +1,37 @@
+/* Main container: centered, max width 1280px, full viewport height */
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0 auto; /* center horizontally */
+  padding: 2.5rem 3rem;
   text-align: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb, #e3e7f0); /* subtle gradient background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2937; /* dark slate gray for better contrast */
 }
 
+/* Logo styling with smooth filter and transition */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  transition: filter 300ms ease-in-out;
+  cursor: pointer;
 }
 
+.logo:hover {
+  filter: drop-shadow(0 0 12px rgba(100, 108, 255, 0.7));
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 12px rgba(97, 218, 251, 0.7));
+}
+
+/* Smooth continuous spinning animation */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -27,16 +41,51 @@
   }
 }
 
+/* Apply spinning animation for non-reduced-motion users */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Card container with soft shadows and subtle radius */
 .card {
-  padding: 2em;
+  padding: 2.5em 3em;
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 2.5rem auto;
+  max-width: 700px;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
 }
 
+.card:hover {
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.06),
+    0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Subtle muted text style */
 .read-the-docs {
-  color: #888;
+  color: #6b7280; /* Tailwind slate-500 */
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  #root {
+    padding: 2rem 1.5rem;
+  }
+
+  .card {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem auto;
+    border-radius: 1rem;
+  }
 }

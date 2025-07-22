@@ -1,17 +1,10 @@
-import AdminAgentReports from './AdminAgentReports';
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import AdminAgentReports from './AdminAgentReports';
 import LandingPage from './LandingPage';
 import Login from './Login';
 import SignUp from './SignUp';
-
-
 import PinStore from './PinStore';
 import CheckInOut from './CheckInOut';
 import StoreVisits from './StoreVisits';
@@ -28,7 +21,7 @@ import AgentAdFeedback from './AgentAdFeedback';
 import SimCardFeedback from './SimCardFeedback';
 import AgentSimCardFeedback from './AgentSimCardFeedback';
 
-
+import './App.css';
 
 function App() {
   const [user, setUser] = React.useState(localStorage.getItem('username'));
@@ -60,7 +53,7 @@ function App() {
 
   return (
     <Router>
-      <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc', marginBottom: '2rem' }}>
+      <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc', marginBottom: '0' }}>
         <Link to="/" style={{ marginRight: 12 }}>Home</Link>
         {!user && <Link to="/login" style={{ marginRight: 12 }}>Login</Link>}
         {!user && <Link to="/signup" style={{ marginRight: 12 }}>Sign Up</Link>}
