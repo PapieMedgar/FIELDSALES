@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # React + Vite
 
@@ -65,3 +66,7 @@ Feel free to modify the project structure and configuration to fit your needs.
 ## Learn More
 - [Vite Documentation](https://vitejs.dev/)
 - [React Documentation](https://react.dev/)
+=======
+# FIELDSALES
+Streamline your sales operations, monitor performance, and gain insights—all in one place.
+>>>>>>> 041ac59c5aea55074838f903ded8c20da9b8b116
