@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 
 const LandingPage = () => (
   <div className="min-h-screen flex items-center justify-center bg-white px-4">
-    <div className="max-w-3xl w-full text-center">
-      <h1 className="text-5xl font-bold text-blue-600 tracking-wide mb-2">Field Sales</h1>
-      <h2 className="text-2xl font-normal text-gray-800 mb-6">by GoNxt</h2>
+    <div className="max-w-3xl max-w-full w-full text-center">
+      <h1 className="text-4xl sm:text-5xl font-bold text-blue-600 tracking-wide mb-2">Field Sales</h1>
+      <h2 className="text-xl sm:text-2xl font-normal text-gray-800 mb-6">by GoNxt</h2>
 
-      <p className="text-lg text-gray-600 mb-4">
+      <p className="text-base sm:text-lg text-gray-600 mb-4">
         Welcome to Field Sales, your modern platform for tracking field agent activity, store visits, and more.
       </p>
 
-      <p className="text-lg text-gray-700 font-medium mb-10">
+      <p className="text-base sm:text-lg text-gray-700 font-medium mb-10">
         Streamline your sales operations, monitor performance, and gain insights—all in one place.
       </p>
 
-      <div className="flex justify-center gap-6">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         <Link
           to="/login"
           className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition duration-200"

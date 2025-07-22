@@ -11,6 +11,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Use relative units for base font size */
+  font-size: 16px;
 }
 
 a {
@@ -25,33 +28,64 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  flex-direction: column;  /* stack children vertically on small */
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  padding: 1rem;  /* add some breathing room */
+  box-sizing: border-box;
 }
 
 h1 {
-  font-size: 3.2em;
+  /* Responsive heading size with clamp */
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
   line-height: 1.1;
+  margin: 0.5em 0;
 }
 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  min-width: 100px;       /* minimum button width */
+  max-width: 100%;        /* allow button to shrink on small screens */
+  box-sizing: border-box; /* include padding in width */
+  white-space: nowrap;    /* prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0.25rem 0;
 }
+
 button:hover {
   border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Responsive layout tweaks for very small screens */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+  button {
+    font-size: 0.9rem;
+    padding: 0.5em 1em;
+    min-width: 80px;
+  }
+  a {
+    font-size: 0.9rem;
+  }
+  h1 {
+    font-size: clamp(1.4rem, 7vw, 2.4rem);
+  }
 }
 
 @media (prefers-color-scheme: light) {
